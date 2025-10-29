@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparks Snack Bar - Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff7536 0%, #c32f09 50%, #ff6b1f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background: linear-gradient(135deg, #ff7536 0%, #c32f09 50%, #ff6b1f 100%); }
+            50% { background: linear-gradient(135deg, #ff8547 0%, #d63f1a 50%, #ff7a2f 100%); }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 40px;
+            align-items: stretch;
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-section {
+            flex: 1;
+            background: white;
+            border-radius: 40px;
+            padding: 50px 40px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2), 0 0 50px rgba(255, 117, 54, 0.15);
+            position: relative;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .menu-header {
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8c00 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            display: inline-block;
+            box-shadow: 0 8px 20px rgba(255, 111, 0, 0.3);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-top {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            text-align: center;
+        }
+
+        .logo-text {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff6f00;
+            letter-spacing: 2px;
+        }
+
+        .logo-subtitle {
+            font-size: 12px;
+            color: #ff6f00;
+            letter-spacing: 1px;
+        }
+
+        .menu-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8c00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            font-style: italic;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: #fff9e6;
+            transform: translateX(8px);
+            border-bottom-color: #ff6f00;
+        }
+
+        .item-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .item-price {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8c00 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(255, 111, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover .item-price {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(255, 111, 0, 0.4);
+        }
+
+        .syrup-badge {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(135deg, #ffeb3b 0%, #ffd54f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(255, 235, 59, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.3);
+            font-weight: 800;
+            font-size: 18px;
+            z-index: 5;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.05);
+            }
+        }
+
+        .contact-section {
+            display: flex;
+            gap: 30px;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .contact-icon {
+            font-size: 24px;
+        }
+
+        .delivery-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            background: #ff6f00;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .delivery-icon {
+            font-size: 28px;
+        }
+
+        .right-section {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pancake-image {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #ffd89b 0%, #fff 100%);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #999;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        .nav-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ffb34d 0%, #ff9a1f 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 179, 77, 0.4);
+            transition: all 0.3s ease;
+            z-index: 100;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 12px 40px rgba(255, 179, 77, 0.6);
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .right-section {
+                height: 400px;
+            }
+
+            .pancake-image {
+                height: 100%;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .left-section {
+                padding: 30px 20px;
+            }
+
+            .logo-top {
+                position: static;
+                margin-bottom: 20px;
+            }
+
+            .menu-header {
+                font-size: 20px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .contact-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="nav-button">🏠 Home</a>
+
+    <div class="container">
+        <div class="left-section">
+            <div class="logo-top">
+                <div class="logo-text">S</div>
+            </div>
+
+            <div class="menu-header">MENU</div>
+
+            <div class="menu-section">
+                <h2 class="section-title">Dry Pancakes</h2>
+                
+                <div class="menu-item">
+                    <div class="item-name">TREASURE MIX<br>(SMALL)</div>
+                    <div class="item-price">₵30</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-name">MARVEL MIX<br>(MEDIUM)</div>
+                    <div class="item-price">₵50</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-name">GLORIOUS MIX<br>(LARGE)</div>
+                    <div class="item-price">₵70</div>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <h2 class="section-title">Fluffy Mini<br>Pancakes</h2>
+                
+                <div class="menu-item">
+                    <div class="item-name">MINI FLUFF FRENZY<br>(10 PIECES)</div>
+                    <div class="item-price">₵30</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-name">DOUBLE DELIGHT BITES<br>(20 PIECES)</div>
+                    <div class="item-price">₵40</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-name">FLUFF FRENZY FEAST<br>(30 PIECES)</div>
+                    <div class="item-price">₵50</div>
+                </div>
+            </div>
+
+            <div class="syrup-badge">
+                <div>SYRUP<br>₵10<br>PER CUP</div>
+            </div>
+
+            <div class="contact-section">
+                <div class="contact-item">
+                    <span class="contact-icon">💬</span>
+                    <span>0538293775</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📷</span>
+                    <span>sparkssnacks</span>
+                </div>
+            </div>
+
+            <a href="order.html" class="delivery-badge" style="text-decoration: none; cursor: pointer;">
+                <span class="delivery-icon">🛵</span>
+                <span>ORDER NOW</span>
+            </a>
+        </div>
+
+        <div class="right-section">
+            <div class="pancake-image" style="background-image: url('https://images.pexels.com/photos/718739/pexels-photo-718739.jpeg?auto=compress&cs=tinysrgb&w=600'); background-size: cover; background-position: center;"></div>
+        </div>
+    </div>
+</body>
+</html>

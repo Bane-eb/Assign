@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparks Snack Bar - Place Order</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff7536 0%, #c32f09 50%, #ff6b1f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background: linear-gradient(135deg, #ff7536 0%, #c32f09 50%, #ff6b1f 100%); }
+            50% { background: linear-gradient(135deg, #ff8547 0%, #d63f1a 50%, #ff7a2f 100%); }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 40px;
+            padding: 50px 40px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25), 0 0 50px rgba(255, 117, 54, 0.15);
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8c00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8c00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8c00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #ff6f00;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Arial', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff6f00;
+            box-shadow: 0 0 5px rgba(255, 111, 0, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .menu-items {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .menu-item-group {
+            margin-bottom: 25px;
+        }
+
+        .menu-item-group-title {
+            font-weight: bold;
+            color: #ff6f00;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: #fff9e6;
+            border-color: #ff6f00;
+            transform: translateX(5px);
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .item-price {
+            color: #ff6f00;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .item-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .item-input input {
+            width: 60px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .quantity-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .order-summary {
+            background: #f0f0f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .summary-row.total {
+            font-weight: bold;
+            font-size: 18px;
+            color: #ff6f00;
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8c00 100%);
+            color: white;
+            font-weight: 700;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(255, 111, 0, 0.4);
+        }
+
+        .btn-cancel {
+            background: #ddd;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background: #ccc;
+        }
+
+        .nav-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ffb34d 0%, #ff9a1f 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 179, 77, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 100;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 12px 40px rgba(255, 179, 77, 0.6);
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .menu-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item-input {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="nav-button">🏠 Home</a>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">sparks</div>
+            <div class="title">Place Your Order</div>
+            <div class="subtitle">Select items and provide your details below</div>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            ✓ ORDER PLACED SUCCESSFULLY
+        </div>
+
+        <form id="orderForm">
+            <!-- Menu Items Section -->
+            <div class="form-section">
+                <div class="section-title">📋 Select Items</div>
+                
+                <div class="menu-items">
+                    <!-- Dry Pancakes -->
+                    <div class="menu-item-group">
+                        <div class="menu-item-group-title">Dry Pancakes</div>
+                        
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Treasure Mix (Small)</div>
+                                <div class="item-price">₵30</div>
+                            </div>
+                            <div class="item-input">
+                                <input type="number" name="treasure_mix" min="0" value="0" class="item-qty">
+                                <span class="quantity-label">qty</span>
+                            </div>
+                        </div>
+
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Marvel Mix (Medium)</div>
+                                <div class="item-price">₵50</div>
+                            </div>
+                            <div class="item-input">
+                                <input type="number" name="marvel_mix" min="0" value="0" class="item-qty">
+                                <span class="quantity-label">qty</span>
+                            </div>
+                        </div>
+
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Glorious Mix (Large)</div>
+                                <div class="item-price">₵70</div>
+                            </div>
+                            <div class="item-input">
+                                <input type="number" name="glorious_mix" min="0" value="0" class="item-qty">
+                                <span class="quantity-label">qty</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fluffy Mini Pancakes -->
+                    <div class="menu-item-group">
+                        <div class="menu-item-group-title">Fluffy Mini Pancakes</div>
+                        
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Mini Fluff Frenzy (10 pcs)</div>
+                                <div class="item-price">₵30</div>
+                            </div>
+                            <div class="item-input">
+                                <input type="number" name="mini_fluff" min="0" value="0" class="item-qty">
+                                <span class="quantity-label">qty</span>
+                            </div>
+                        </div>
+
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Double Delight Bites (20 pcs)</div>
+                                <div class="item-price">₵40</div>
+                            </div>
+                            <div class="item-input">
+                                <input type="number" name="double_delight" min="0" value="0" class="item-qty">
+                                <span class="quantity-label">qty</span>
+                            </div>
+                        </div>
+
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Fluff Frenzy Feast (30 pcs)</div>
+                                <div class="item-price">₵50</div>
+                            </div>
+                            <div class="item-input">
+                                <input type="number" name="fluff_feast" min="0" value="0" class="item-qty">
+                                <span class="quantity-label">qty</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Extras -->
+                    <div class="menu-item-group">
+                        <div class="menu-item-group-title">Extras</div>
+                        
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Syrup (Per Cup)</div>
+                                <div class="item-price">₵10</div>
+                            </div>
+                            <div class="item-input">
+                                <input type="number" name="syrup" min="0" value="0" class="item-qty">
+                                <span class="quantity-label">qty</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">₵0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery Fee:</span>
+                    <span id="deliveryFee">₵5</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="total">₵5</span>
+                </div>
+            </div>
+
+            <!-- Customer Details Section -->
+            <div class="form-section">
+                <div class="section-title">👤 Your Details</div>
+
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email (Optional)</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Delivery Address *</label>
+                    <textarea id="address" name="address" required placeholder="Enter your delivery address"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Special Instructions (Optional)</label>
+                    <textarea id="notes" name="notes" placeholder="Any special requests or instructions?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="delivery">Delivery Option *</label>
+                    <select id="delivery" name="delivery" required>
+                        <option value="">Select delivery option</option>
+                        <option value="home">Home Delivery (₵5)</option>
+                        <option value="pickup">Pickup (Free)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button type="button" class="btn btn-cancel" onclick="resetForm()">Clear Form</button>
+                <button type="submit" class="btn btn-submit">Place Order</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const menuItems = {
+            treasure_mix: 30,
+            marvel_mix: 50,
+            glorious_mix: 70,
+            mini_fluff: 30,
+            double_delight: 40,
+            fluff_feast: 50,
+            syrup: 10
+        };
+
+        const form = document.getElementById('orderForm');
+        const quantityInputs = document.querySelectorAll('.item-qty');
+        const deliverySelect = document.getElementById('delivery');
+        const successMessage = document.getElementById('successMessage');
+
+        // Update total when quantities change
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', updateTotal);
+        });
+
+        deliverySelect.addEventListener('change', updateTotal);
+
+        function updateTotal() {
+            let subtotal = 0;
+
+            quantityInputs.forEach(input => {
+                const itemName = input.name;
+                const quantity = parseInt(input.value) || 0;
+                const price = menuItems[itemName];
+                subtotal += quantity * price;
+            });
+
+            let deliveryFee = 0;
+            if (deliverySelect.value === 'home') {
+                deliveryFee = 5;
+            }
+
+            const total = subtotal + deliveryFee;
+
+            document.getElementById('subtotal').textContent = '₵' + subtotal;
+            document.getElementById('deliveryFee').textContent = '₵' + deliveryFee;
+            document.getElementById('total').textContent = '₵' + total;
+        }
+
+        function resetForm() {
+            form.reset();
+            quantityInputs.forEach(input => input.value = 0);
+            deliverySelect.value = '';
+            updateTotal();
+            successMessage.style.display = 'none';
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Check if at least one item is selected
+            const hasItems = Array.from(quantityInputs).some(input => parseInt(input.value) > 0);
+            if (!hasItems) {
+                alert('Please select at least one item');
+                return;
+            }
+
+            // Prepare order data
+            const orderData = new FormData();
+            orderData.append('name', document.getElementById('name').value);
+            orderData.append('phone', document.getElementById('phone').value);
+            orderData.append('email', document.getElementById('email').value);
+            orderData.append('address', document.getElementById('address').value);
+            orderData.append('notes', document.getElementById('notes').value);
+            orderData.append('delivery', document.getElementById('delivery').value);
+            
+            const items = {};
+            quantityInputs.forEach(input => {
+                const qty = parseInt(input.value) || 0;
+                if (qty > 0) {
+                    items[input.name] = qty;
+                }
+            });
+            
+            orderData.append('items', JSON.stringify(items));
+            orderData.append('subtotal', document.getElementById('subtotal').textContent.replace('₵', ''));
+            orderData.append('deliveryFee', document.getElementById('deliveryFee').textContent.replace('₵', ''));
+            orderData.append('total', document.getElementById('total').textContent.replace('₵', ''));
+
+            // Send order to database via AJAX
+            fetch('process_order.php', {
+                method: 'POST',
+                body: orderData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    
+                    // Reset form after 2 seconds
+                    setTimeout(() => {
+                        resetForm();
+                    }, 2000);
+                } else {
+                    alert('Error placing order: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error placing order. Please try again.');
+            });
+        });
+
+
+        // Initialize total on page load
+        updateTotal();
+    </script>
+</body>
+</html>
